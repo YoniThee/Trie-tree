@@ -4,12 +4,20 @@ class Trie {
 protected:
 	class TrieNode {
 	public:
-		TrieNode* children[? ? ? ] = { 0 };
+		TrieNode* children[26] = { 0 };
 		TrieNode* father;
 		bool isEndWord = false;
+		char ch;
 	};
 public:
-	Tire() {}
+	Trie()
+	{
+		for (int i = 0; i < 26; i++) {
+			this->root->children[i] = nullptr;
+		}
+	}
+
+	TrieNode * root;
 
 	void insertWord(string word);
 	void deleteWord(string word);
