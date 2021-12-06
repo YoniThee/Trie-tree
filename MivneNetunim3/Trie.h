@@ -1,5 +1,6 @@
 #pragma once
 #include<string>
+using namespace std;
 class Trie {
 protected:
 	class TrieNode {
@@ -12,17 +13,18 @@ protected:
 public:
 	Trie()
 	{
+		root = new TrieNode();
 		for (int i = 0; i < 26; i++) {
 			this->root->children[i] = nullptr;
 		}
 	}
 
 	TrieNode * root;
-
 	void insertWord(string word);
-	void deleteWord(string word);
+	bool deleteWord(TrieNode* node, string word);
 	bool searchWord(string word);
 	void PrintAllWordsFromPrefix(TrieNode *);
+	bool anyChild(TrieNode* node);
 
 private:
 	bool searchWord(string word, TrieNode* node);
