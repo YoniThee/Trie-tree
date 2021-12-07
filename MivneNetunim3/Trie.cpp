@@ -6,17 +6,23 @@ using namespace std;
 void Trie::insertWord(string word)
 {
 
-	Trie* curr = this;
+	TrieNode * curr = this->root;
     for (int i = 0; i < word.length(); i++)
     {
+        TrieNode* temp = curr/*->children[(word[i] - 97)] */;
         // create a new node if the path doesn't exist
-        if (curr->root->children[(int)word[i]-97] == nullptr) {
-            curr->root->children[(int)word[i]-97] = new TrieNode();
+        if (curr/*->children[(word[i] - 97)] */== nullptr) {
+            //TrieNode * temp1 = new TrieNode();
+            curr = new TrieNode();
+            //curr->root->children[(int)(word[i] - 97)] = new TrieNode();
+
         }
 
         // go to the next node
-        curr->root = curr->root->children[(int)word[i]-97];
+        int z = (int)(word[i] - 97);
+        curr = curr->children[(int)(word[i] - 97)];
     }
+    curr->isEndWord;
 }
 
 bool Trie::deleteWord(TrieNode * node, string word)
@@ -58,7 +64,7 @@ bool Trie::searchWord(string word)
         }
 
         TrieNode* node = root;
-        for (int i = 0; i < word.length(); i++)
+        for (int i = 1; i < word.length(); i++)
         {
             // if the string is invalid (reached end of a path in the Trie)
             if (node == nullptr) {

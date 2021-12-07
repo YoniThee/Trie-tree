@@ -9,6 +9,13 @@ protected:
 		TrieNode* father;
 		bool isEndWord = false;
 		char ch;
+
+		TrieNode()
+		{
+			children[26] = { 0 };
+			
+		}
+
 	};
 public:
 	Trie()
@@ -18,6 +25,8 @@ public:
 			this->root->children[i] = nullptr;
 		}
 	}
+
+
 
 	TrieNode * root;
 	void insertWord(string word);
