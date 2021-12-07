@@ -34,6 +34,7 @@ bool Trie::deleteWord(TrieNode * node, string word)
     // if the end of the word is not reached
     if (word.length())
     {
+
         // recur for the node corresponding to the next character in the word
         // and if it returns true, delete the current node (if it is non-leaf)
 
