@@ -11,18 +11,18 @@ void Trie::insertWord(string word)
     {
         TrieNode* temp = curr/*->children[(word[i] - 97)] */;
         // create a new node if the path doesn't exist
-        if (curr/*->children[(word[i] - 97)] */== nullptr) {
+        if (curr->children[(word[i] - 97)] == nullptr) {
             //TrieNode * temp1 = new TrieNode();
-            curr = new TrieNode();
+            curr->children[(int)(word[i] - 97)] = new TrieNode();
             //curr->root->children[(int)(word[i] - 97)] = new TrieNode();
 
         }
 
         // go to the next node
-        int z = (int)(word[i] - 97);
+        //int z = (int)(word[i] - 97);
         curr = curr->children[(int)(word[i] - 97)];
     }
-    curr->isEndWord;
+    curr->isEndWord = true;
 }
 
 bool Trie::deleteWord(TrieNode * node, string word)
@@ -64,16 +64,17 @@ bool Trie::searchWord(string word)
             return false;
         }
 
+        //                                             ben
         TrieNode* node = root;
-        for (int i = 1; i < word.length(); i++)
+        for (int i = 0; i < word.length(); i++)
         {
             // if the string is invalid (reached end of a path in the Trie)
-            if (node == nullptr) {
+            if (node->children[(int)word[i] - 97] == nullptr) {
                 return false;
             }
             // go to the next node
             node = node->children[(int)word[i]-97];
-         
+            
         }
 
         // return true if the current node is a leaf and the
