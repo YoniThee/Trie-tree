@@ -2,7 +2,7 @@
 #include<string>
 using namespace std;
 class Trie {
-protected:
+public:
 	class TrieNode {
 	public:
 		TrieNode* children[26] = { 0 };
@@ -23,7 +23,7 @@ public:
 	void insertWord(string word);
 	bool deleteWord(TrieNode* node, string word);
 	bool searchWord(string word);
-	void PrintAllWordsFromPrefix(TrieNode *);
+	bool PrintAllWordsFromPrefix(string ch);
 	bool anyChild(TrieNode* node);
 
 private:

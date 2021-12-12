@@ -98,10 +98,50 @@ bool Trie::searchWord(string word)
         return node->isEndWord;
     }
 }
-
-void Trie::PrintAllWordsFromPrefix(TrieNode*)
+void print(Trie::TrieNode * node, string str, int level) 
 {
+    {
+        // If node is leaf node, it indicates end
+        // of string, so a null character is added
+        // and string is displayed
+        if (node->isEndWord)
+        {
+            str += '\n';
+            cout << str << endl;
+        }
+
+        for (int i = 0; i < 26; i++)
+        {
+            // if NON NULL child is found
+            // add parent key to str and
+            // call the display function recursively
+            // for child node
+            if (node->children[i])
+            {
+                str += (char)(i + 97);
+                print(node->children[i], str, level + 1);
+            }
+        }
+    }
+}
+bool Trie::PrintAllWordsFromPrefix(string firstCharInWord)
+{
+    int level = 0;
+    //string str;
+
+   // chek if have this profix in tree
+    TrieNode* node = nullptr;
     
+    if (root->children[(int)(firstCharInWord[0] - 97)] != nullptr) {
+        node = root->children[(int)(firstCharInWord[0]-97)];
+    }
+    
+    if (node != nullptr) {
+        print(node, firstCharInWord, level);
+        return true;
+    }
+    else
+        return false;
 }
 
 bool Trie::anyChild(TrieNode* node)
