@@ -1,3 +1,4 @@
+//Shay Doplet 208737981 && Yehonatan Thee 209016393
 #include<iostream>
 using namespace std;
 #include <list>
@@ -33,7 +34,7 @@ int main()
 		case '2':
 			cout << "Enter a word to del " << endl;
 			cin >> wrd;
-			if (!tr.deleteWord(tr.root,wrd)) cout << "ERROR\n";
+			if (!tr.deleteWord(wrd)) cout << "ERROR\n";
 			break;
 		case '3':
 			cout << "Enter a word to search " << endl;

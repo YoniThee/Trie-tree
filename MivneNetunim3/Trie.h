@@ -21,7 +21,7 @@ public:
 
 	TrieNode * root;
 	void insertWord(string word);
-	bool deleteWord(TrieNode* node, string word);
+	bool deleteWord(string word);
 	bool searchWord(string word);
 	bool PrintAllWordsFromPrefix(string ch);
 	bool anyChild(TrieNode* node);

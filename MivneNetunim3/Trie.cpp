@@ -26,24 +26,23 @@ void Trie::insertWord(string word)
     curr->isEndWord = true;
 }
 
-bool Trie::deleteWord(TrieNode * node, string word)
+bool Trie::deleteWord(string word)
 {
-    if (node == nullptr) {
-        return false;
-    }
-    Trie* temp = new Trie();
-    temp->root = node;
-    if (temp->searchWord(word)) {
+    TrieNode * node = root;
+    if (searchWord(word)) {
         // go to the last node at this word
         for (int i = 0; i < word.length(); i++) {
-            temp->root = temp->root->children[(int)(word[i] - 97)];
+            node = node->children[(int)(word[i] - 97)];
         }
-        for (int i = 0; i < word.length(); i++) {
+
+        for (int i = word.length()-1; i >= 0; i--) {
             // if the end of word no have any child
-            if (!(temp->anyChild(temp->root))) {
-                temp->root = temp->root->father;
-                temp->root->children[(int)(word[i]-97)] = nullptr;
+            if (!(anyChild(node))) {
+                node = node->father;
+                node->children[(int)(word[i] - 97)] = nullptr;
             }
+            if (node->isEndWord)
+                node->isEndWord = false;
         }
         return true;
     }
@@ -98,7 +97,7 @@ bool Trie::searchWord(string word)
         return node->isEndWord;
     }
 }
-void print(Trie::TrieNode * node, string str, int level) 
+void print(Trie::TrieNode * node, string str) 
 {
     {
         // If node is leaf node, it indicates end
@@ -106,38 +105,49 @@ void print(Trie::TrieNode * node, string str, int level)
         // and string is displayed
         if (node->isEndWord)
         {
-            str += '\n';
             cout << str << endl;
+            int i = 0;
+            for (; i < 26; i++) {
+                if (node->children[i] != nullptr) {
+                    //הבעיה היא איך לבחור לאיזה צומת לחזור כאשר סיימנו מילה אחת, כמה אחורה ללכת ולפי זה מה המחרוזת הרלוונטית
+                    str = str.substr(0, str.length() - 1);
+                    break;
+                }
+            }
+            if(i == 26) //the node have no leaf
+                str = "";
         }
 
         for (int i = 0; i < 26; i++)
         {
-            // if NON NULL child is found
-            // add parent key to str and
-            // call the display function recursively
-            // for child node
             if (node->children[i])
             {
                 str += (char)(i + 97);
-                print(node->children[i], str, level + 1);
+                print(node->children[i], str);
             }
         }
     }
 }
-bool Trie::PrintAllWordsFromPrefix(string firstCharInWord)
+bool Trie::PrintAllWordsFromPrefix(string word)
 {
-    int level = 0;
     //string str;
 
    // chek if have this profix in tree
     TrieNode* node = nullptr;
     
-    if (root->children[(int)(firstCharInWord[0] - 97)] != nullptr) {
-        node = root->children[(int)(firstCharInWord[0]-97)];
+    if (root->children[(int)(word[0] - 97)] != nullptr) {
+        node = root->children[(int)(word[0]-97)];
+        // check if the rest of word id exists
+        for (int i = 1; i < word.length(); i++) {
+            if (node->children[(int)(word[i]-97)] == nullptr)
+                node = nullptr;
+
+        }
     }
     
-    if (node != nullptr) {
-        print(node, firstCharInWord, level);
+    if (node) {
+        word = word[0];
+        print(node, word);
         return true;
     }
     else
