@@ -6,24 +6,19 @@ using namespace std;
 void Trie::insertWord(string word)
 {
 
-	TrieNode * curr = this->root;
+	TrieNode * node = this->root;
     for (int i = 0; i < word.length(); i++)
     {
         // create a new node if the path doesn't exist
-        if (curr->children[(word[i] - 97)] == nullptr) {
-            //TrieNode * temp1 = new TrieNode();
-            curr->children[(int)(word[i] - 97)] = new TrieNode();
-            //curr->root->children[(int)(word[i] - 97)] = new TrieNode();
-
+        if (node->children[(word[i] - 97)] == nullptr) {
+            node->children[(int)(word[i] - 97)] = new TrieNode();
         }
-
         // go to the next node
-        //int z = (int)(word[i] - 97);
-        TrieNode* temp = curr/*->children[(word[i] - 97)] */;
-        curr = curr->children[(int)(word[i] - 97)];
-        curr->father = temp;
+        TrieNode* temp = node;
+        node = node->children[(int)(word[i] - 97)];
+        node->father = temp;
     }
-    curr->isEndWord = true;
+    node->isEndWord = true;
 }
 
 bool Trie::deleteWord(string word)
@@ -47,28 +42,6 @@ bool Trie::deleteWord(string word)
         return true;
     }
     return false;
-    // if the end of the word is not reached
-    //if (word.length())
-    //{
-    //    // recur for the node corresponding to the next character in the word
-    //    // and if it returns true, delete the current node (if it is non-leaf)
-    //    
-    //    if (node != nullptr &&
-    //        node->children[(int)word[0]-97] != nullptr &&
-    //        deleteWord(node->children[(int)word[0]-97], word.substr(1)) &&
-    //        node->isEndWord == false)
-    //    {
-    //        if (!anyChild(node))
-    //        {
-    //            delete node;
-    //            node = nullptr;
-    //            return true;
-    //        }
-    //        else {
-    //            return false;
-    //        }
-    //    }
-    //}
 }
 
 bool Trie::searchWord(string word)
@@ -79,11 +52,10 @@ bool Trie::searchWord(string word)
             return false;
         }
 
-        //                                             ben
         TrieNode* node = root;
         for (int i = 0; i < word.length(); i++)
         {
-            // if the string is invalid (reached end of a path in the Trie)
+            // if the string is invalid 
             if (node->children[(int)word[i] - 97] == nullptr) {
                 return false;
             }
@@ -92,62 +64,59 @@ bool Trie::searchWord(string word)
             
         }
 
-        // return true if the current node is a leaf and the
+        // return true if the nodeent node is a leaf and the
         // end of the string is reached
         return node->isEndWord;
     }
 }
-void print(Trie::TrieNode * node, string str) 
-{
+void print(Trie::TrieNode * node, string str, int level) 
+{    
+    if (node->isEndWord)
     {
-        // If node is leaf node, it indicates end
-        // of string, so a null character is added
-        // and string is displayed
-        if (node->isEndWord)
-        {
-            cout << str << endl;
-            int i = 0;
-            for (; i < 26; i++) {
-                if (node->children[i] != nullptr) {
-                    //הבעיה היא איך לבחור לאיזה צומת לחזור כאשר סיימנו מילה אחת, כמה אחורה ללכת ולפי זה מה המחרוזת הרלוונטית
-                    str = str.substr(0, str.length() - 1);
-                    break;
-                }
-            }
-            if(i == 26) //the node have no leaf
-                str = "";
+        cout << str << endl;
+        int i = 0;
+        for (; i < 26; i++) {
+            if (node->children[i] != nullptr) 
+                break;            
         }
+        if (i == 26) //the node have no leaf
+            str = "";
+    }
 
-        for (int i = 0; i < 26; i++)
+    for (int i = 0; i < 26; i++)
+    {
+        if (node->children[i])
         {
-            if (node->children[i])
-            {
-                str += (char)(i + 97);
-                print(node->children[i], str);
-            }
+            str += (char)(i + 97);
+            print(node->children[i], str, level + 1);
+           //after finish one word oprinting in reqursive return to the last char in str that have another children
+            str = str.substr(0, level);
+
         }
     }
 }
 bool Trie::PrintAllWordsFromPrefix(string word)
 {
-    //string str;
 
    // chek if have this profix in tree
     TrieNode* node = nullptr;
-    
+    int i = 1;
     if (root->children[(int)(word[0] - 97)] != nullptr) {
         node = root->children[(int)(word[0]-97)];
         // check if the rest of word id exists
-        for (int i = 1; i < word.length(); i++) {
-            if (node->children[(int)(word[i]-97)] == nullptr)
+        for (; i < word.length(); i++) {
+            if (node->children[(int)(word[i] - 97)] == nullptr)
                 node = nullptr;
+            else
+                node = node->children[(int)(word[i] - 97)];
 
         }
     }
     
     if (node) {
-        word = word[0];
-        print(node, word);
+        int level = i;
+        word = word.substr(0,i);
+        print(node, word,level);
         return true;
     }
     else
@@ -166,27 +135,27 @@ bool Trie::anyChild(TrieNode* node)
     return false;
 }
 
-bool Trie::searchWord(string word, TrieNode* node)
+bool Trie::searchWord(string word, TrieNode* root)
 {
     {
         // return false if Trie is empty
-        if (node == nullptr) {
+        if (root == nullptr) {
             return false;
         }
 
-        TrieNode* curr = node;
+        TrieNode* node = root;
         for (int i = 0; i < word.length(); i++)
         {
             // go to the next node
-            curr = curr->children[(int)word[i] - 97];
-            // if the string is invalid (reached end of a path in the Trie)
-            if (curr == nullptr) {
+            node = node->children[(int)word[i] - 97];
+            // if the string is invalid
+            if (node == nullptr) {
                 return false;
             }
         }
 
-        // return true if the current node is a leaf and the
+        // return true if the nodeent node is a leaf and the
         // end of the string is reached
-        return curr->isEndWord;
+        return node->isEndWord;
     }
 }

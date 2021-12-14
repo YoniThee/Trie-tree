@@ -1,4 +1,7 @@
-//Shay Doplet 208737981 && Yehonatan Thee 209016393
+/*
+Authers: Shay Doplet 208737981 && Yehonatan Thee 209016393
+description: this program is crate a Trie tree and allows the user to insert, delete, search and print words from the tree
+*/
 #include<iostream>
 using namespace std;
 #include <list>
